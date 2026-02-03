@@ -1,0 +1,21 @@
+# Dependencies (will be installed in Docker)
+node_modules/
+
+# Environment files (use Docker environment instead)
+.env
+
+# Build outputs (will be built in Docker)
+dist/
+
+# Git files
+.git
+.gitignore
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/

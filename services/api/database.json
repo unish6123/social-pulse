@@ -1,0 +1,10 @@
+{
+  "dev": {
+    "driver": "pg",
+    "host": "localhost",
+    "port": 5432,
+    "database": "social_pulse",
+    "user": "postgres",
+    "password": "postgres"
+  }
+}
