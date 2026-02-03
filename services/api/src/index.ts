@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import logger from './config/logger';
 import pool from './config/database';
 import redisClient, { connectRedis } from './config/redis';
+import routes from './routes';
 
 dotenv.config();
 
@@ -14,7 +15,10 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Health check route
+// Mount API routes
+app.use('/api', routes);
+
+// Root health check
 app.get('/health', async (req, res) => {
   try {
     // Check database connection
@@ -71,6 +75,8 @@ const startServer = async () => {
     // Start Express server
     app.listen(PORT, () => {
       logger.info(`🚀 API Server running on port ${PORT}`);
+      logger.info(`📍 Health check: http://localhost:${PORT}/health`);
+      logger.info(`📍 API endpoints: http://localhost:${PORT}/api`);
     });
   } catch (error) {
     logger.error('❌ Failed to start server:', error);
