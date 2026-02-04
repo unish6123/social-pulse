@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import keywordsRoutes from './keywords.routes';
+import postsRoutes from './posts.routes';
 
 const router = Router();
 
 // Mount routes
 router.use('/keywords', keywordsRoutes);
+router.use('/posts', postsRoutes);
 
 // Health check (can also be here)
 router.get('/health', (req, res) => {
