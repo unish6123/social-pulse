@@ -1,5 +1,6 @@
 import pool from '../config/database';
 import { Post, CreatePostDTO, PostWithKeyword } from '../models/Post';
+import { delCache } from './cache.service';
 
 // Get all posts with keyword information
 export const getAllPosts = async (): Promise<PostWithKeyword[]> => {
@@ -34,6 +35,7 @@ export const getPostById = async (id: number): Promise<PostWithKeyword | null> =
 };
 
 // Create a new post
+
 export const createPost = async (data: CreatePostDTO): Promise<Post> => {
   const result = await pool.query(
     `INSERT INTO posts (platform, external_id, author, content, keyword_id, posted_at) 
@@ -41,12 +43,29 @@ export const createPost = async (data: CreatePostDTO): Promise<Post> => {
      RETURNING *`,
     [data.platform, data.external_id, data.author, data.content, data.keyword_id, data.posted_at]
   );
+  
+  // Invalidate caches for this keyword
+  await delCache(`posts:keyword:${data.keyword_id}`);
+  await delCache(`sentiment:stats:keyword:${data.keyword_id}`);
+  
   return result.rows[0];
 };
 
-// Delete a post
+
+// Delete a post (WITH CACHE INVALIDATION)
 export const deletePost = async (id: number): Promise<void> => {
+  // Get keyword_id before deleting
+  const postResult = await pool.query('SELECT keyword_id FROM posts WHERE id = $1', [id]);
+  
+  // Delete the post
   await pool.query('DELETE FROM posts WHERE id = $1', [id]);
+  
+  // Invalidate caches if post existed
+  if (postResult.rows.length > 0) {
+    const keywordId = postResult.rows[0].keyword_id;
+    await delCache(`posts:keyword:${keywordId}`);
+    await delCache(`sentiment:stats:keyword:${keywordId}`);
+  }
 };
 
 // Get posts count by keyword

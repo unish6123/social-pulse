@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+dotenv.config();
 import logger from './config/logger';
 import pool from './config/database';
 import redisClient, { connectRedis } from './config/redis';
@@ -12,8 +13,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));app.use(express.json());
 
 // Mount API routes
 app.use('/api', routes);
