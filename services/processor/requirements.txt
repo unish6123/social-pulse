@@ -1,0 +1,4 @@
+vaderSentiment==3.3.2
+psycopg==3.2.3
+python-dotenv==1.0.0
+redis==5.0.1

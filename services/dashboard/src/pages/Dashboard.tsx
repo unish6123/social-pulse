@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { getKeywords, getSentimentStats } from '../services/api';
 import type { Keyword, SentimentStats } from '../types';
+import SentimentChart from '../components/SentimentChart';
+import KeywordForm from '../components/KeywordForm';
 
 function Dashboard() {
   const [keywords, setKeywords] = useState<Keyword[]>([]);
@@ -49,6 +51,7 @@ function Dashboard() {
     <div style={{ padding: '20px' }}>
       <h1>Social Pulse Dashboard</h1>
       
+      <KeywordForm onKeywordCreated={loadKeywords} />
       {/* Keyword Selector */}
       <div style={{ marginBottom: '20px' }}>
         <label>Select Keyword: </label>
@@ -88,7 +91,12 @@ function Dashboard() {
 
           <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
             <h3>Sentiment Breakdown</h3>
-            <div style={{ display: 'flex', gap: '20px' }}>
+            
+            {/* Pie Chart */}
+            <SentimentChart stats={stats} />
+            
+            {/* Bar visualization */}
+            <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
               <div style={{ flex: 1 }}>
                 <p>Positive: {stats.sentiment_breakdown.positive} ({stats.percentages.positive}%)</p>
                 <div style={{ 
