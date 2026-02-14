@@ -1,6 +1,6 @@
 export interface Post {
   id: number;
-  platform: 'twitter' | 'reddit';
+  platform: 'twitter' | 'reddit' | 'news';
   external_id: string;
   author: string;
   content: string;
