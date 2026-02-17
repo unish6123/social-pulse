@@ -1,6 +1,6 @@
 export interface Post {
   id: number;
-  platform: 'twitter' | 'reddit' | 'news';
+  platform: 'twitter' | 'reddit' | 'news' | 'nytimes';
   external_id: string;
   author: string;
   content: string;
@@ -10,7 +10,7 @@ export interface Post {
 }
 
 export interface CreatePostDTO {
-  platform: 'twitter' | 'reddit';
+  platform: 'twitter' | 'reddit' | 'news' | 'nytimes';
   external_id: string;
   author: string;
   content: string;

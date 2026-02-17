@@ -64,8 +64,8 @@ export const createPost = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
-    if (platform !== 'twitter' && platform !== 'reddit' && platform !== 'news') {
-  return res.status(400).json({ error: 'Platform must be twitter, reddit, or news' });
+    if ( platform !== 'news' && platform !== 'nytimes') {
+  return res.status(400).json({ error: 'Platform must be news channel or nytimes' });
 }
 
     const newPost = await postsService.createPost({
