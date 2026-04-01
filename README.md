@@ -1,4 +1,8 @@
-# Social Pulse 📊
+# Social Pulse 📊 Real-Time Sentiment Analysis Platform
+
+![CI Pipeline](https://github.com/unish6123/social-pulse/workflows/CI%20Pipeline/badge.svg)
+![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
+![Docker](https://img.shields.io/badge/docker-ready-blue)
 
 Real-time social media monitoring platform that tracks mentions, analyzes sentiment, and provides actionable insights across Twitter and Reddit.
 
