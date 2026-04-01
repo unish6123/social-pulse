@@ -1,54 +1,51 @@
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
-import type { SentimentStats } from '../types';
+import { PieChart, Pie, Cell } from 'recharts';
+import type { SentimentStats } from '../services/api';
 
 interface Props {
   stats: SentimentStats;
 }
 
+const SIZE = 128;
+
 const COLORS = {
-  positive: '#4caf50',
-  negative: '#f44336',
-  neutral: '#9e9e9e',
+  positive: '#22c55e',
+  neutral: '#6b7280',
+  negative: '#ef4444',
 };
 
-function SentimentChart({ stats }: Props) {
+export default function SentimentChart({ stats }: Props) {
   const data = [
     { name: 'Positive', value: stats.sentiment_breakdown.positive },
-    { name: 'Negative', value: stats.sentiment_breakdown.negative },
     { name: 'Neutral', value: stats.sentiment_breakdown.neutral },
-  ].filter(item => item.value > 0); // Only show non-zero values
+    { name: 'Negative', value: stats.sentiment_breakdown.negative },
+  ].filter(item => item.value > 0);
 
   if (data.length === 0) {
-    return <div style={{ padding: '20px', textAlign: 'center' }}>No sentiment data available</div>;
+    return (
+      <div className="flex items-center justify-center h-full text-gray-400 text-sm w-32 h-32">
+        No data
+      </div>
+    );
   }
 
   return (
-    <div style={{ width: '100%', height: '300px' }}>
-      <ResponsiveContainer>
-        <PieChart>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {data.map((entry) => (
-              <Cell 
-                key={`cell-${entry.name}`} 
-                fill={COLORS[entry.name.toLowerCase() as keyof typeof COLORS]} 
-              />
-            ))}
-          </Pie>
-          <Tooltip />
-          <Legend />
-        </PieChart>
-      </ResponsiveContainer>
-    </div>
+    <PieChart width={SIZE} height={SIZE}>
+      <Pie
+        data={data}
+        cx={SIZE / 2}
+        cy={SIZE / 2}
+        innerRadius={24}
+        outerRadius={48}
+        paddingAngle={2}
+        dataKey="value"
+      >
+        {data.map((entry, index) => (
+          <Cell
+            key={`cell-${index}`}
+            fill={COLORS[entry.name.toLowerCase() as keyof typeof COLORS]}
+          />
+        ))}
+      </Pie>
+    </PieChart>
   );
 }
-
-export default SentimentChart;

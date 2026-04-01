@@ -1,39 +1,42 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: '/api',
 });
 
-// Health check
-export const healthCheck = async () => {
-  const response = await api.get('/health');
-  return response.data;
+export interface Keyword {
+  id: number;
+  keyword: string;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface SentimentStats {
+  keyword_id: number;
+  keyword: string;
+  total_posts: number;
+  analyzed_posts: number;
+  sentiment_breakdown: {
+    positive: number;
+    negative: number;
+    neutral: number;
+  };
+  average_score: number;
+  percentages: {
+    positive: number;
+    negative: number;
+    neutral: number;
+  };
+}
+
+export const keywordsAPI = {
+  getAll: () => api.get<Keyword[]>('/keywords'),
+  create: (keyword: string) => api.post<Keyword>('/keywords', { keyword }),
+  delete: (id: number) => api.delete(`/keywords/${id}`),
 };
 
-// Keywords
-export const getKeywords = async () => {
-  const response = await api.get('/api/keywords');
-  return response.data;
-};
-
-export const createKeyword = async (keyword: string) => {
-  const response = await api.post('/api/keywords', { keyword });
-  return response.data;
-};
-
-// Sentiment Stats
-export const getSentimentStats = async (keywordId: number) => {
-  const response = await api.get(`/api/sentiment/stats/keyword/${keywordId}`);
-  return response.data;
-};
-
-// Posts
-export const getPostsByKeyword = async (keywordId: number) => {
-  const response = await api.get(`/api/posts/keyword/${keywordId}`);
-  return response.data;
+export const sentimentAPI = {
+  getStats: (keywordId: number) => api.get<SentimentStats>(`/sentiment/stats/keyword/${keywordId}`),
 };
 
 export default api;
